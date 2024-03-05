@@ -13,8 +13,6 @@ int main()
 	myGraph += vec3;
 	myGraph += vec4;
     
-	// Faire les tests en modifiant les coordonnees du vecteur operateurs de surcharge.
 	std::cout << myGraph << std::endl;
-
     return (0);
 }

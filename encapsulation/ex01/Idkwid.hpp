@@ -14,14 +14,10 @@ struct Vector2
     {
     }
 
-    Vector2(float x, float y) : _x(x), _y(y)
+    Vector2(float x, float y) : _x(x >= 0 ? x : 0), _y(y >= 0 ? y : 0)
     {
     }
 
-    void print()
-    {
-        std::cout << "(" << _x << ", " << _y << ")" << std::endl;
-    }
 
     float getX() const
     {
@@ -31,21 +27,6 @@ struct Vector2
     float getY() const
     {
         return _y;
-    }
-
-    Vector2 operator+(const Vector2 &other) const
-    {
-        return Vector2(_x + other._x, _y + other._y);
-    }
-
-    Vector2 operator-(const Vector2 &other) const
-    {
-        return Vector2(_x - other._x, _y - other._y);
-    }
-
-    Vector2 operator*(float scalar) const
-    {
-        return Vector2(_x * scalar, _y * scalar);
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Vector2 &v)
@@ -59,7 +40,6 @@ class Graph
 {
   private:
     int _size;
-
     std::list<Vector2> _vecs;
 
   public:
@@ -77,6 +57,10 @@ class Graph
 
 	Graph &operator+=(const Vector2 &vec)
 	{
+        if (vec.getX() > _size || vec.getY() > _size)
+        {
+            std::cerr << "You cannot add a vector size larger than the graph size." << std::cout;
+        }
         _vecs.push_back(vec);
 		return *this;
 	}
