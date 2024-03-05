@@ -49,7 +49,22 @@ struct Bank
     typedef int amount;
 
     std::map<clientId, amount> loanTracks;
-    std::vector<Account *> clientAccounts;
+    std::map<clientId, Account *> clientAccounts;
+
+    Account *operator[](int id)
+    {
+        if (id < 0 || static_cast<std::size_t>(id) >= clientAccounts.size())
+        {
+            throw std::out_of_range("Invalid client id");
+        }
+        std::map<clientId, Account *>::iterator it = clientAccounts.find(id);
+        if (it != clientAccounts.end())
+        {
+            return it->second;
+        }
+        std::cerr << "The account does not exist in the bank register" << std::endl;
+        return nullptr;
+    }
 
   public:
     Bank() : liquidity(0)
@@ -58,9 +73,9 @@ struct Bank
 
     ~Bank()
     {
-        for (std::vector<Account *>::iterator it = clientAccounts.begin(); it != clientAccounts.end(); ++it)
+        for (std::map<clientId, Account *>::iterator it = clientAccounts.begin(); it != clientAccounts.end(); ++it)
         {
-            delete *it;
+            delete it->second;
         }
         clientAccounts.clear();
     }
@@ -68,44 +83,27 @@ struct Bank
     void createAccount()
     {
         Account *newAccount = new Account();
-        clientAccounts.push_back(newAccount);
-
+        clientAccounts[newAccount->id] = newAccount;
         std::cout << "The account " << newAccount->id << " was successfully created" << std::endl;
-    }
-
-    std::vector<Account *>::iterator findClient(int id)
-    {
-        for (std::vector<Account *>::iterator it = clientAccounts.begin(); it != clientAccounts.end(); ++it)
-        {
-            Account *account = *it;
-            if (account->id == id)
-            {
-                return it;
-            }
-        }
-        std::cerr << "The account does not exist in the bank register" << std::endl;
-        return clientAccounts.end();
     }
 
     void deleteAccount(int id)
     {
-        std::vector<Account *>::iterator it = findClient(id);
+        Account *account = (*this)[id];
 
-        if (it != clientAccounts.end())
+        if (account != nullptr)
         {
-            delete *it;
-            clientAccounts.erase(it);
+            delete account;
+            clientAccounts.erase(id);
         }
     }
 
     void deposit(int amount, int id)
     {
-        std::vector<Account *>::iterator it = findClient(id);
+        Account *account = (*this)[id];
 
-        if (it != clientAccounts.end())
+        if (account != nullptr)
         {
-            Account *account = *it;
-
             this->liquidity += (0.05 * amount);
             account->value += (1 - 0.05) * amount;
             std::cout << "The account " << account->id << " was successfully funded with " << amount
@@ -115,12 +113,10 @@ struct Bank
 
     void withdrawal(int amount, int id)
     {
-        std::vector<Account *>::iterator it = findClient(id);
+        Account *account = (*this)[id];
 
-        if (it != clientAccounts.end())
+        if (account != nullptr)
         {
-            Account *account = *it;
-
             if (amount <= account->value)
             {
                 account->value -= amount;
@@ -138,18 +134,15 @@ struct Bank
 
     void loanMaker(int amount, int id)
     {
-        std::vector<Account *>::iterator it = findClient(id);
+        Account *account = (*this)[id];
 
-        if (it != clientAccounts.end())
+        if (account != nullptr)
         {
-            Account *account = *it;
             if (this->liquidity >= amount)
             {
                 this->liquidity -= amount;
                 account->value += amount;
-
                 this->loanTracks[id] = amount;
-
                 std::cout << "The account receives a loan from the bank " << account->id << " in the amount of "
                           << amount << std::endl;
             }
@@ -162,22 +155,20 @@ struct Bank
 
     void loanRepay(int amount, int id)
     {
-        std::vector<Account *>::iterator it = findClient(id);
+        Account *account = (*this)[id];
 
-        if (it != clientAccounts.end())
+        if (account != nullptr)
         {
             if (this->loanTracks.count(id) > 0 && amount <= this->loanTracks[id])
             {
-                (*it)->value -= amount;
+                account->value -= amount;
                 this->liquidity += amount;
                 this->loanTracks[id] -= amount;
-
                 if (this->loanTracks[id] == 0)
                 {
                     this->loanTracks.erase(id);
                 }
-
-                std::cout << "The account " << (*it)->id << " has successfully repaid a loan amount of " << amount
+                std::cout << "The account " << account->id << " has successfully repaid a loan amount of " << amount
                           << " with a remaining of " << this->loanTracks[id] << std::endl;
             }
             else
@@ -195,9 +186,9 @@ struct Bank
         p_os << "Liquidity : " << p_bank.liquidity << std::endl;
 
         p_os << "Client Accounts : " << std::endl;
-        std::vector<Account *>::const_iterator it;
+        std::map<clientId, Account *>::const_iterator it;
         for (it = p_bank.clientAccounts.begin(); it != p_bank.clientAccounts.end(); ++it)
-            p_os << *(*it) << std::endl;
+            p_os << *(it->second) << std::endl;
 
         p_os << "Client Loans : " << std::endl;
         std::map<int, int>::const_iterator map_it;

@@ -24,5 +24,8 @@ int main()
     myBank.loanRepay(10, 5);
     std::cout << myBank << std::endl;
 
+	myBank.deleteAccount(5);
+	std::cout << myBank << std::endl;
+
     return (0);
 }

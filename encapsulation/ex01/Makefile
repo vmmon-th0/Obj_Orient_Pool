@@ -3,13 +3,14 @@ NAME		= a.out
 SRCS		= main.cpp Idkwid.cpp
 CXXFLAGS	= -Wall -Wextra -Werror -pedantic -std=c++98
 OBJS		= $(SRCS:.cpp=.o)
+HPP			= Idkwid.hpp
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(HPP)
 	@echo "\033[0;33mLinking process in progress..."
 	$(CXX) -o $(NAME) $(OBJS)
 	@echo "\033[0;32m-------------------------------------"
