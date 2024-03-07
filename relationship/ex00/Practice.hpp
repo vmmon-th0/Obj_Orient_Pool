@@ -65,7 +65,7 @@ class Worker
 
 		void takeAwayShovel()
 		{
-			_shovel = nullptr;
+			_shovel = NULL;
 			std::cout << "The shovel is taken away from the Worker" << std::endl;
 		}
 };

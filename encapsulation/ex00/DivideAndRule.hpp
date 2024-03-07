@@ -63,7 +63,7 @@ struct Bank
             return it->second;
         }
         std::cerr << "The account does not exist in the bank register" << std::endl;
-        return nullptr;
+        return NULL;
     }
 
   public:
@@ -91,7 +91,7 @@ struct Bank
     {
         Account *account = (*this)[id];
 
-        if (account != nullptr)
+        if (account != NULL)
         {
             delete account;
             clientAccounts.erase(id);
@@ -102,7 +102,7 @@ struct Bank
     {
         Account *account = (*this)[id];
 
-        if (account != nullptr)
+        if (account != NULL)
         {
             this->liquidity += (0.05 * amount);
             account->value += (1 - 0.05) * amount;
@@ -115,7 +115,7 @@ struct Bank
     {
         Account *account = (*this)[id];
 
-        if (account != nullptr)
+        if (account != NULL)
         {
             if (amount <= account->value)
             {
@@ -136,7 +136,7 @@ struct Bank
     {
         Account *account = (*this)[id];
 
-        if (account != nullptr)
+        if (account != NULL)
         {
             if (this->liquidity >= amount)
             {
@@ -157,7 +157,7 @@ struct Bank
     {
         Account *account = (*this)[id];
 
-        if (account != nullptr)
+        if (account != NULL)
         {
             if (this->loanTracks.count(id) > 0 && amount <= this->loanTracks[id])
             {
