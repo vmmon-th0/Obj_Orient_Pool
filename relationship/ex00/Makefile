@@ -3,7 +3,7 @@ NAME		= a.out
 SRCS		= main.cpp Practice.cpp
 CXXFLAGS	= -Wall -Wextra -Werror -pedantic -std=c++98
 OBJS		= $(SRCS:.cpp=.o)
-HPP			= Practice.hpp
+HPP			= Hammer.hpp Shovel.hpp Tool.hpp Worker.hpp Workshop.hpp
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
