@@ -1,0 +1,19 @@
+#ifndef CARINFOS_HPP
+#define CARINFOS_HPP
+
+#define MAX_WHEEL_ANGLE 30
+#define BRAKING_DECELERATION 5
+#define MAX_BATMOBILE_SPEED 395
+
+typedef enum gear
+{
+    NEUTRAL,
+    FIRST_GEAR,
+    SECOND_GEAR,
+    THIRD_GEAR,
+    FOURTH_GEAR,
+    FIFTH_GEAR,
+    REVERSE,
+} Gear;
+
+#endif
