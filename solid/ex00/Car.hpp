@@ -1,8 +1,10 @@
 #ifndef CAR_HPP
 #define CAR_HPP
 
-#include "carInfos.hpp"
+#include <cmath>
 #include <climits>
+#include <iostream>
+#include "CarInfos.hpp"
 
 class Car
 {
@@ -43,52 +45,52 @@ class Car
 
     void shift_gears_up()
     {
-        if (gear == FIFTH_GEAR)
+        if (_gear == FIFTH_GEAR)
         {
             std::cout << "max gear reached" << std::endl;
             return;
         }
-        else if (gear == REVERSE)
+        else if (_gear == REVERSE)
         {
             std::cout << "cannot gear up in REVERSE mode" << std::endl;
             return;
         }
-        _gear++;
+        _gear = (Gear)((int)_gear + 1);
     }
 
     void shift_gears_down()
     {
-        if (gear == NEUTRAL)
+        if (_gear == NEUTRAL)
         {
             std::cout << "min gear reached" << std::endl;
             return;
         }
-        else if (gear == REVERSE)
+        else if (_gear == REVERSE)
         {
             std::cout << "cannot gear down in REVERSE mode" << std::endl;
             return;
         }
-        _gear--;
+        _gear = (Gear)((int)_gear - 1);
     }
 
     void reverse()
     {
-        if (gear == REVERSE)
+        if (_gear == REVERSE)
         {
             std::cout << "already in REVERSE mode" << std::endl;
             return;
         }
-        else if (gear != NEUTRAL)
+        else if (_gear != NEUTRAL)
         {
             std::cout << "It's strongly recommended to set NEUTRAL gear before REVERSE" << std::endl;
             return;
         }
-        gear = REVERSE;
+        _gear = REVERSE;
     }
 
     void turn_wheel(int angle)
     {
-        if (angle > MAX_ WHEEL_ANGLE)
+        if (angle > MAX_WHEEL_ANGLE)
         {
             angle = MAX_WHEEL_ANGLE;
             std::cout << "Maximum wheel angle reached." << std::endl;
@@ -128,15 +130,15 @@ class Car
 
     void apply_emergency_brakes()
     {
-        apply_emergency_brakes(INT_MAX);
+        apply_force_on_brakes(INT_MAX);
     }
 
   private:
-    int _gear;
+    Gear _gear;
     int _speed;
     int _wheelAngle;
 
     std::string _carName;
-}
+};
 
 #endif

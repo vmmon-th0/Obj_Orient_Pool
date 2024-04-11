@@ -13,7 +13,7 @@ typedef enum gear
     THIRD_GEAR,
     FOURTH_GEAR,
     FIFTH_GEAR,
-    REVERSE,
+    REVERSE
 } Gear;
 
 #endif
